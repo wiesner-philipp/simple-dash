@@ -1,20 +1,26 @@
 {
-	"title" : "Simple Dash",
+	"title" : "Your Dashboard",
+	"showLabels" : false,
 	"items" : [
 		{
 			"alt" : "Github",
 			"icon" : "fab fa-github",
-			"link" : "https://github.com/kutyla-philipp"
+			"link" : "https://github.com/wiesner-philipp"
 		},
 		{
 			"alt" : "Twitter",
 			"icon" : "fab fa-twitter",
-			"link" : "https://twitter.com/Kukielka_"
+			"link" : "https://twitter.com/Kuki_txt"
 		},
 		{
-			"alt" : "Docker Hub",
-			"icon" : "fab fa-docker",
-			"link" : "https://hub.docker.com/u/kukielka/"
+			"alt" : "Instagram",
+			"icon" : "fas fa-camera",
+			"link" : "https://instagram.com/Kuki_png/"
+		},
+		{
+			"alt" : "Ko-fi",
+			"icon" : "fa-brands fa-ko-fi",
+			"link" : "https://ko-fi.com/philippwiesner"
 		}
 	]
 }

@@ -9,7 +9,7 @@ simple-dash is made to be as simple and minimalistic as possible. (The goal was 
 Based on: https://github.com/thetomester13/homepage
 
 This project uses:
-- Font Awesome
+- Font Awesome 7
 - Trianglify
 
 ## Screenshots
@@ -20,4 +20,5 @@ This project uses:
 Copy the config.sample.json file and rename to config.json. Be sure to update the fields as you see appropriate.
 
 ## Configure Homepage
-- 'items' => The menu will scale to the amount of items you want to display. Insert any link you'd like, or {{cur}} for the current URL of the page. Choose icons from [Font Awesome](http://fontawesome.io/icons/)
+- 'items' => The menu will scale to the amount of items you want to display. Insert any link you'd like, or {{cur}} for the current URL of the page. Browse icons at [Font Awesome](https://fontawesome.com/search?ic=free) and use the class shown there, e.g. `fa-solid fa-house` or `fa-brands fa-github`.
+- 'showLabels' => Optional, defaults to `true`. Set to `false` to hide the text labels under each icon.

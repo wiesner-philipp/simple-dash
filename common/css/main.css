@@ -1,3 +1,19 @@
+:root {
+	--ink: #f5f6fa;
+	--ink-soft: rgba(245, 246, 250, .74);
+	--glass: rgba(10, 11, 16, .62);
+	--glass-hover: rgba(10, 11, 16, .76);
+	--glass-border: rgba(245, 246, 250, .14);
+	--glass-border-hover: rgba(245, 246, 250, .3);
+	--accent: #f2b84b;
+	--radius: 20px;
+	--tile: 108px;
+	--gap: 20px;
+}
+
+* {
+	box-sizing: border-box;
+}
 html, body {
 	height: 100%;
 	width: 100%;
@@ -5,54 +21,165 @@ html, body {
 }
 body {
 	z-index: 1;
+	background-color: #12131a;
 	background-position: center;
 	background-attachment: fixed;
-}
-
-.github-corner {
-	opacity: 0.4;
-}
-.github-corner:hover {
-	opacity: 1;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 #wrapper {
 	height: 100%;
+	height: 100dvh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: clamp(24px, 5vw, 48px);
+	padding: 32px max(24px, env(safe-area-inset-right)) 32px max(24px, env(safe-area-inset-left));
+}
+
+#dash-header {
+	text-align: center;
+}
+#dash-header:empty {
+	display: none;
+}
+#dash-title {
+	margin: 0;
+	color: var(--ink);
+	font-size: clamp(1.5rem, 4vw, 2.25rem);
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	text-shadow: 0 2px 24px rgba(0, 0, 0, .35);
+}
+
+#itemlist {
 	display: grid;
+	grid-template-columns: repeat(auto-fit, var(--tile));
+	gap: var(--gap);
+	justify-content: center;
+	max-width: min(92vw, 780px);
+	padding: 0;
+	margin: 0;
+	list-style: none;
 }
-#itemlist {
-	display: inline-grid;
-	grid-template-columns: repeat(2, 1fr);
-	margin: auto;
+
+/* Each shortcut is one frosted-glass card; icon and label share the same
+   backing so labels stay legible no matter what color the background is. */
+.tile {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	width: var(--tile);
+	padding: 20px 10px 16px;
+	border-radius: var(--radius);
+	background: var(--glass);
+	border: 1px solid var(--glass-border);
+	backdrop-filter: blur(20px) saturate(140%) brightness(.74);
+	-webkit-backdrop-filter: blur(20px) saturate(140%) brightness(.74);
+	box-shadow: 0 6px 18px rgba(0, 0, 0, .18);
+	text-decoration: none;
+	color: var(--ink);
+	opacity: 0;
+	transform: translateY(10px) scale(.96);
+	animation: tile-in .5s ease forwards;
+	animation-delay: calc(var(--i, 0) * 40ms);
+	transition: transform .18s ease, background-color .18s ease, border-color .18s ease, box-shadow .18s ease;
 }
-@media only screen and (min-width: 600px) {
-	#itemlist {
-		grid-template-columns: repeat(3, 1fr);
+
+.tile-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 48px;
+	font-size: 2.9rem;
+	line-height: 1;
+}
+.tile-label {
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: .78rem;
+	font-weight: 600;
+	letter-spacing: .01em;
+	color: var(--ink-soft);
+	text-align: center;
+}
+
+/* Optional: config.showLabels = false hides the text, re-centers the icon,
+   and gives it more room to grow since the label no longer needs space. */
+#itemlist.no-labels {
+	--tile: 120px;
+}
+#itemlist.no-labels .tile-label {
+	display: none;
+}
+#itemlist.no-labels .tile {
+	aspect-ratio: 1;
+	padding: 0;
+	justify-content: center;
+}
+#itemlist.no-labels .tile-icon {
+	height: auto;
+	font-size: 3.75rem;
+}
+
+.tile:hover,
+.tile:focus-visible {
+	transform: translateY(-4px);
+	background: var(--glass-hover);
+	border-color: var(--glass-border-hover);
+	box-shadow: 0 12px 24px rgba(0, 0, 0, .22);
+}
+.tile:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 3px;
+}
+.tile:hover .tile-label,
+.tile:focus-visible .tile-label {
+	color: var(--ink);
+}
+
+#itemlist.is-message {
+	display: flex;
+	justify-content: center;
+}
+.message-panel {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 16px 22px;
+	border-radius: var(--radius);
+	background: var(--glass);
+	border: 1px solid var(--glass-border);
+	backdrop-filter: blur(20px) saturate(140%) brightness(.74);
+	-webkit-backdrop-filter: blur(20px) saturate(140%) brightness(.74);
+	box-shadow: 0 6px 18px rgba(0, 0, 0, .18);
+	color: var(--ink-soft);
+	font-size: .95rem;
+}
+
+@keyframes tile-in {
+	from {
+		opacity: 0;
+		transform: translateY(10px) scale(.96);
+	}
+	to {
+		opacity: 1;
+		transform: none;
 	}
 }
-@media only screen and (min-width: 800px) {
-	#itemlist {
-		grid-template-columns: repeat(6, 1fr);
+
+@media (prefers-reduced-motion: reduce) {
+	.tile {
+		animation: none;
+		opacity: 1;
+		transform: none;
 	}
-}
-
-#itemlist {
-	border-radius: 6px;
-	background-color: rgba(0, 0, 0, .4);
-	font-size: 4em;
-}
-#itemlist>* {
-	padding: 15px;
-	margin: 0 auto;
-}
-
-
-
-
-/* link colors */
-#itemlist a {
-	color: #fff;
-}
-#itemlist a:hover {
-	color: #c4c4c4;
+	.tile, .tile-label {
+		transition: none;
+	}
 }
