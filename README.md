@@ -1,7 +1,7 @@
 [![Mentioned in Awesome-Selfhosted](https://awesome.re/mentioned-badge.svg)](https://github.com/Kickball/awesome-selfhosted#personal-dashboards)
 # simple-dash
 
-Try the Demo here: https://kutyla-philipp.github.io/simple-dash/
+Try the Demo here: https://wiesner-philipp.github.io/simple-dash/
 
 A simple, fully responsive Dashboard to forward to the services of your choice! Ideal for Desktop and mobile usage!
 Add all of your services, whether you host them yourself or not and display them as neat Icons from the FontAwesome libary.
@@ -13,8 +13,8 @@ This project uses:
 - Trianglify
 
 ## Screenshots
-![Homepage Desktop](example_img/homepage-desktop.jpg?raw=true)
-![Homepage Mobile](example_img/homepage-mobile.jpg?raw=true)
+![Homepage Desktop](example_img/homepage-desktop.png?raw=true)
+![Homepage Mobile](example_img/homepage-mobile.png?raw=true)
 
 ## To Use
 Copy the config.sample.json file and rename to config.json. Be sure to update the fields as you see appropriate.
