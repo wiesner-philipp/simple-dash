@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>simple-dash — config generator</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="color-scheme" content="dark light" />
+		<meta name="theme-color" content="#12131a" />
+		<link rel="stylesheet" href="common/css/fontawesome-all.min.css" />
+		<link rel="stylesheet" href="common/css/main.css" />
+		<link rel="stylesheet" href="common/css/generator.css" />
+		<link rel="icon" type="image/x-icon" href="favicon.ico" />
+	</head>
+
+	<body id="homepage">
+		<div id="page">
+			<header id="tool-header">
+				<h1>config generator</h1>
+				<p>Build your <code>config.json</code>, preview it live against a real triangulated background, then download it straight into your simple-dash folder.</p>
+				<a class="back-link" href="index.html">&larr; Back to the dashboard</a>
+			</header>
+
+			<div id="layout">
+				<section id="editor" aria-label="Editor">
+					<div class="panel">
+						<label class="field">
+							<span>Title</span>
+							<input id="f-title" type="text" placeholder="Your Homepage Title" />
+						</label>
+						<label class="field checkbox-row">
+							<input id="f-showlabels" type="checkbox" checked />
+							<span>Show labels under icons</span>
+						</label>
+					</div>
+
+					<div class="panel">
+						<div class="panel-head">
+							<h2>Shortcuts</h2>
+							<button id="add-item" class="btn btn-accent" type="button">+ Add shortcut</button>
+						</div>
+						<div id="items"></div>
+						<p id="items-empty" class="empty-hint" hidden>No shortcuts yet — add one above.</p>
+					</div>
+
+					<div class="panel">
+						<div class="panel-head">
+							<h2>Import / export</h2>
+						</div>
+						<div class="row-actions">
+							<button id="import-btn" class="btn" type="button">Import config.json</button>
+							<input id="import-file" type="file" accept="application/json" hidden />
+							<button id="download-btn" class="btn btn-accent" type="button">Download config.json</button>
+							<button id="copy-btn" class="btn" type="button">Copy JSON</button>
+						</div>
+						<pre id="json-output" tabindex="0"></pre>
+					</div>
+				</section>
+
+				<section id="preview-col" aria-label="Live preview">
+					<div class="preview-label">Live preview</div>
+					<div id="preview-stage">
+						<header id="dash-header">
+							<h1 id="dash-title"></h1>
+						</header>
+						<nav id="itemlist" aria-label="Shortcuts"></nav>
+					</div>
+				</section>
+			</div>
+		</div>
+
+		<div id="icon-picker" hidden>
+			<div class="picker-panel">
+				<div class="picker-head">
+					<input id="icon-search" type="text" placeholder="Search icons&hellip; e.g. github, home, cloud" autocomplete="off" />
+					<button id="icon-picker-close" class="btn" type="button">Close</button>
+				</div>
+				<div id="icon-results"></div>
+			</div>
+		</div>
+
+		<script src="common/js/trianglify.min.js"></script>
+		<script src="common/js/generator.js"></script>
+	</body>
+</html>

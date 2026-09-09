@@ -2,6 +2,7 @@
 # simple-dash
 
 Try the Demo here: https://wiesner-philipp.github.io/simple-dash/
+Config generator: https://wiesner-philipp.github.io/simple-dash/generator.html
 
 A simple, fully responsive Dashboard to forward to the services of your choice! Ideal for Desktop and mobile usage!
 Add all of your services, whether you host them yourself or not and display them as neat Icons from the FontAwesome libary.
@@ -20,5 +21,7 @@ This project uses:
 Copy the config.sample.json file and rename to config.json. Be sure to update the fields as you see appropriate.
 
 ## Configure Homepage
+Prefer a visual editor? Open `generator.html` (in your browser, or hosted alongside the rest of the site on GitHub Pages) to build your config with a live preview, search Font Awesome icons by name, and download the resulting `config.json`.
+
 - 'items' => The menu will scale to the amount of items you want to display. Insert any link you'd like, or {{cur}} for the current URL of the page. Browse icons at [Font Awesome](https://fontawesome.com/search?ic=free) and use the class shown there, e.g. `fa-solid fa-house` or `fa-brands fa-github`.
 - 'showLabels' => Optional, defaults to `true`. Set to `false` to hide the text labels under each icon.
