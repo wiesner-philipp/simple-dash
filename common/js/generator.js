@@ -392,19 +392,20 @@
 	});
 
 	// --- Background + init --------------------------------------------------
-	function addTriangleTo(target) {
-		const { width, height } = target.getBoundingClientRect();
-		const pattern = Trianglify({ width, height });
-		target.style.backgroundImage = `url(${pattern.png()})`;
-		target.style.backgroundSize = "cover";
+	// Fixed to the viewport (see #bg in generator.css), so it stays put while
+	// the long form scrolls over it, and only ever needs to match the
+	// viewport size rather than the page's full scrollable height.
+	function renderBackground() {
+		const pattern = Trianglify({ width: window.innerWidth, height: window.innerHeight });
+		bg.style.backgroundImage = `url(${pattern.png()})`;
 	}
 
 	let resizeTimer;
 	window.addEventListener("resize", () => {
 		clearTimeout(resizeTimer);
-		resizeTimer = setTimeout(() => addTriangleTo(homepage), 400);
+		resizeTimer = setTimeout(renderBackground, 400);
 	});
 
-	addTriangleTo(homepage);
+	renderBackground();
 	render();
 })();

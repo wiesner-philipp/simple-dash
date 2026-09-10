@@ -284,6 +284,14 @@ input.f-alt::placeholder, input.f-icon::placeholder, input.f-link::placeholder,
 	background: rgba(0, 0, 0, .18);
 	border: 1px solid var(--glass-border);
 }
+/* main.css sizes #itemlist against the full page (min(92vw, 780px)), which
+   is correct on the real dashboard but too wide for this narrower column -
+   without a hard cap here the auto-fit grid computes its column count
+   against that indeterminate width and tiles spill outside the panel. */
+#preview-stage #itemlist {
+	width: 100%;
+	max-width: 100%;
+}
 
 /* Icon picker modal ------------------------------------------------------------ */
 #icon-picker {

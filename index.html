@@ -13,6 +13,7 @@
 	</head>
 
 	<body id="homepage">
+		<div id="bg" aria-hidden="true"></div>
 
 		<main id="wrapper">
 			<header id="dash-header">
@@ -71,7 +72,6 @@
 
 					itemlist.classList.remove("is-message");
 					itemlist.replaceChildren(fragment);
-					addTriangleTo(homepage);
 				} catch (error) {
 					console.error(error);
 					document.title = error.message;
@@ -85,26 +85,26 @@
 						'<i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>' +
 						'<span>Couldn\u2019t load config.json \u2014 check the console for details.</span>';
 					itemlist.appendChild(panel);
-					addTriangleTo(homepage);
 				}
 			}
 
-			function addTriangleTo(target) {
-				const { width, height } = target.getBoundingClientRect();
-				const pattern = Trianglify({ width, height });
-
-				target.style.backgroundImage = `url(${pattern.png()})`;
-				target.style.backgroundSize = "cover";
+			// The background is a fixed, viewport-pinned layer (see #bg in the
+			// CSS) rather than a background-image on body: it only ever needs
+			// to match the viewport size, never the page's scrollable content
+			// height, and it visually stays put while the tiles scroll over it.
+			function renderBackground() {
+				const pattern = Trianglify({ width: window.innerWidth, height: window.innerHeight });
+				bg.style.backgroundImage = `url(${pattern.png()})`;
 			}
 
 			let resizeTimer;
 			window.addEventListener("resize", () => {
 				clearTimeout(resizeTimer);
-				resizeTimer = setTimeout(() => addTriangleTo(homepage), 400);
+				resizeTimer = setTimeout(renderBackground, 400);
 			});
 
 			loadConfig();
-			addTriangleTo(homepage);
+			renderBackground();
 		</script>
 	</body>
 </html>
