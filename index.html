@@ -45,6 +45,7 @@
 					document.title = config.title ?? "simple-dash";
 					heading.textContent = config.title ?? "";
 					itemlist.classList.toggle("no-labels", config.showLabels === false);
+					applyBackground(config.background);
 
 					const fragment = document.createDocumentFragment();
 
@@ -97,10 +98,40 @@
 				bg.style.backgroundImage = `url(${pattern.png()})`;
 			}
 
+			let usingCustomBackground = false;
+
+			// config.background (optional) points at a custom image - any URL
+			// or path relative to config.json. Preloaded so a broken path
+			// falls back to the generated pattern instead of a blank layer.
+			function applyBackground(path) {
+				if (!path) {
+					usingCustomBackground = false;
+					bg.classList.remove("custom");
+					return;
+				}
+
+				const preload = new Image();
+				preload.onload = () => {
+					usingCustomBackground = true;
+					bg.classList.add("custom");
+					bg.style.backgroundImage = `url(${JSON.stringify(path)})`;
+				};
+				preload.onerror = () => {
+					console.warn(`Couldn't load the custom background "${path}"; using the generated pattern instead.`);
+					usingCustomBackground = false;
+					bg.classList.remove("custom");
+					renderBackground();
+				};
+				preload.src = path;
+			}
+
 			let resizeTimer;
 			window.addEventListener("resize", () => {
 				clearTimeout(resizeTimer);
-				resizeTimer = setTimeout(renderBackground, 400);
+				resizeTimer = setTimeout(() => {
+					if (usingCustomBackground) return;
+					renderBackground();
+				}, 400);
 			});
 
 			loadConfig();
