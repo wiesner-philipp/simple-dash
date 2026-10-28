@@ -1,8 +1,9 @@
 :root {
 	--ink: #f5f6fa;
 	--ink-soft: rgba(245, 246, 250, .74);
-	--glass: rgba(10, 11, 16, .62);
-	--glass-hover: rgba(10, 11, 16, .76);
+	--glass-opacity: .62;
+	--glass: rgba(10, 11, 16, var(--glass-opacity));
+	--glass-hover: rgba(10, 11, 16, calc(var(--glass-opacity) + .14));
 	--glass-border: rgba(245, 246, 250, .14);
 	--glass-border-hover: rgba(245, 246, 250, .3);
 	--accent: #f2b84b;

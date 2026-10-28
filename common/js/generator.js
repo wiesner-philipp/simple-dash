@@ -7,6 +7,7 @@
 	const defaultState = {
 		title: "Your Homepage Title",
 		showLabels: true,
+		glassOpacity: 0.62,
 		background: "",
 		items: [
 			{ alt: "Github", icon: "fa-brands fa-github", link: "https://github.com/your-username" },
@@ -23,6 +24,7 @@
 			return {
 				title: typeof parsed.title === "string" ? parsed.title : "",
 				showLabels: parsed.showLabels !== false,
+				glassOpacity: typeof parsed.glassOpacity === "number" && parsed.glassOpacity >= 0 && parsed.glassOpacity <= 1 ? parsed.glassOpacity : defaultState.glassOpacity,
 				background: typeof parsed.background === "string" ? parsed.background : "",
 				items: Array.isArray(parsed.items) ? parsed.items.map(normalizeItem) : []
 			};
@@ -63,6 +65,8 @@
 	const els = {
 		title: document.getElementById("f-title"),
 		showLabels: document.getElementById("f-showlabels"),
+		glassOpacity: document.getElementById("f-glassopacity"),
+		glassOpacityValue: document.getElementById("glass-opacity-value"),
 		background: document.getElementById("f-background"),
 		items: document.getElementById("items"),
 		itemsEmpty: document.getElementById("items-empty"),
@@ -99,6 +103,9 @@
 	function render() {
 		els.title.value = state.title;
 		els.showLabels.checked = state.showLabels;
+		els.glassOpacity.value = state.glassOpacity;
+		els.glassOpacityValue.textContent = String(state.glassOpacity);
+		document.documentElement.style.setProperty("--glass-opacity", String(state.glassOpacity));
 		els.background.value = state.background;
 		applyBackground(state.background);
 		renderItems();
@@ -243,6 +250,7 @@
 		const output = {
 			title: state.title,
 			showLabels: state.showLabels,
+			glassOpacity: state.glassOpacity,
 			...(state.background ? { background: state.background } : {}),
 			items: state.items.map((item) => ({ alt: item.alt, icon: item.icon, link: item.link, ...(item.target === "_blank" ? { target: "_blank" } : {}) }))
 		};
@@ -363,6 +371,14 @@
 	els.showLabels.addEventListener("change", () => {
 		state.showLabels = els.showLabels.checked;
 		renderPreview();
+		renderJSON();
+		saveDraft();
+	});
+	els.glassOpacity.addEventListener("input", () => {
+		const value = parseFloat(els.glassOpacity.value);
+		state.glassOpacity = value;
+		els.glassOpacityValue.textContent = String(value);
+		document.documentElement.style.setProperty("--glass-opacity", String(value));
 		renderJSON();
 		saveDraft();
 	});

@@ -45,6 +45,9 @@
 					document.title = config.title ?? "simple-dash";
 					heading.textContent = config.title ?? "";
 					itemlist.classList.toggle("no-labels", config.showLabels === false);
+					if (typeof config.glassOpacity === "number" && config.glassOpacity >= 0 && config.glassOpacity <= 1) {
+						document.documentElement.style.setProperty("--glass-opacity", String(config.glassOpacity));
+					}
 					applyBackground(config.background);
 
 					const fragment = document.createDocumentFragment();

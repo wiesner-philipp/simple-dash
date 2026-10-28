@@ -1,5 +1,6 @@
 {
 	"title" : "Your Dashboard",
+	"glassOpacity" : 0.62,
 	"showLabels" : false,
 	"items" : [
 		{
