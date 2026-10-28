@@ -32,6 +32,7 @@
 			"subtitle": "Online Shopping",
 			"icon": "fa-brands fa-amazon",
 			"link": "https://amazon.com"
+		},
 		{
 			"title": "Spotify",
 			"subtitle": "Music Streaming",
