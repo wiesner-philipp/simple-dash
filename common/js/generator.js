@@ -7,6 +7,7 @@
 	const defaultState = {
 		title: "Your Homepage Title",
 		showLabels: true,
+		background: "",
 		items: [
 			{ alt: "Github", icon: "fa-brands fa-github", link: "https://github.com/your-username" },
 			{ alt: "Twitter", icon: "fa-brands fa-x-twitter", link: "https://twitter.com/your-handle" },
@@ -22,6 +23,7 @@
 			return {
 				title: typeof parsed.title === "string" ? parsed.title : "",
 				showLabels: parsed.showLabels !== false,
+				background: typeof parsed.background === "string" ? parsed.background : "",
 				items: Array.isArray(parsed.items) ? parsed.items.map(normalizeItem) : []
 			};
 		} catch (error) {
@@ -60,6 +62,7 @@
 	const els = {
 		title: document.getElementById("f-title"),
 		showLabels: document.getElementById("f-showlabels"),
+		background: document.getElementById("f-background"),
 		items: document.getElementById("items"),
 		itemsEmpty: document.getElementById("items-empty"),
 		addItem: document.getElementById("add-item"),
@@ -95,6 +98,8 @@
 	function render() {
 		els.title.value = state.title;
 		els.showLabels.checked = state.showLabels;
+		els.background.value = state.background;
+		applyBackground(state.background);
 		renderItems();
 		renderPreview();
 		renderJSON();
@@ -222,6 +227,7 @@
 		const output = {
 			title: state.title,
 			showLabels: state.showLabels,
+			...(state.background ? { background: state.background } : {}),
 			items: state.items.map((item) => ({ alt: item.alt, icon: item.icon, link: item.link }))
 		};
 		els.jsonOutput.textContent = JSON.stringify(output, null, "\t");
@@ -344,6 +350,14 @@
 		renderJSON();
 		saveDraft();
 	});
+	let backgroundTimer;
+	els.background.addEventListener("input", () => {
+		state.background = els.background.value;
+		renderJSON();
+		saveDraft();
+		clearTimeout(backgroundTimer);
+		backgroundTimer = setTimeout(() => applyBackground(state.background), 500);
+	});
 	els.addItem.addEventListener("click", addItem);
 
 	// --- Export / import --------------------------------------------------
@@ -380,6 +394,7 @@
 			state = {
 				title: typeof parsed.title === "string" ? parsed.title : "",
 				showLabels: parsed.showLabels !== false,
+				background: typeof parsed.background === "string" ? parsed.background : "",
 				items: Array.isArray(parsed.items) ? parsed.items.map(normalizeItem) : []
 			};
 			render();
@@ -400,10 +415,42 @@
 		bg.style.backgroundImage = `url(${pattern.png()})`;
 	}
 
+	let usingCustomBackground = false;
+
+	// Mirrors index.html's handling: preload so a broken URL falls back to
+	// the generated pattern instead of leaving a blank/flat layer.
+	function applyBackground(path) {
+		if (!path) {
+			if (usingCustomBackground) {
+				usingCustomBackground = false;
+				bg.classList.remove("custom");
+				renderBackground();
+			}
+			return;
+		}
+
+		const preload = new Image();
+		preload.onload = () => {
+			usingCustomBackground = true;
+			bg.classList.add("custom");
+			bg.style.backgroundImage = `url(${JSON.stringify(path)})`;
+		};
+		preload.onerror = () => {
+			console.warn(`Couldn't load the custom background "${path}"; using the generated pattern instead.`);
+			usingCustomBackground = false;
+			bg.classList.remove("custom");
+			renderBackground();
+		};
+		preload.src = path;
+	}
+
 	let resizeTimer;
 	window.addEventListener("resize", () => {
 		clearTimeout(resizeTimer);
-		resizeTimer = setTimeout(renderBackground, 400);
+		resizeTimer = setTimeout(() => {
+			if (usingCustomBackground) return;
+			renderBackground();
+		}, 400);
 	});
 
 	renderBackground();

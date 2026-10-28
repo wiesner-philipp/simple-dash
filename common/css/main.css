@@ -51,6 +51,16 @@ body {
 	background-position: center;
 	background-size: cover;
 }
+/* config.background points at a user-supplied image - unlike the generated
+   pattern (whose tonal range the tiles were tuned against), an arbitrary
+   photo could be very bright or busy, so add a little extra insurance for
+   title/tile legibility on top of it. */
+#bg.custom::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, .25);
+}
 
 /* min-height (not a fixed height) lets #wrapper center short lists like
    before, but grow with the page - rather than clip - once a long list of
