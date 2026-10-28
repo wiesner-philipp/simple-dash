@@ -406,13 +406,48 @@
 	});
 
 	els.copyBtn.addEventListener("click", async () => {
+		const text = els.jsonOutput.textContent;
+		let success = false;
+
+		// Try modern Clipboard API first
 		try {
-			await navigator.clipboard.writeText(els.jsonOutput.textContent);
-			const original = els.copyBtn.textContent;
-			els.copyBtn.textContent = "Copied!";
-			setTimeout(() => (els.copyBtn.textContent = original), 1200);
+			await navigator.clipboard.writeText(text);
+			success = true;
 		} catch (error) {
-			console.warn("Clipboard copy failed; select the JSON manually instead.", error);
+			console.warn("Clipboard API failed, trying fallback.", error);
+
+			// Fallback: use execCommand with a temporary textarea
+			try {
+				const textarea = document.createElement("textarea");
+				textarea.value = text;
+				textarea.style.position = "fixed";
+				textarea.style.opacity = "0";
+				textarea.setAttribute("readonly", "");
+				document.body.appendChild(textarea);
+
+				textarea.select();
+				textarea.setSelectionRange(0, textarea.value.length);
+
+				success = document.execCommand("copy");
+				document.body.removeChild(textarea);
+			} catch (fallbackError) {
+				console.warn("Fallback copy also failed.", fallbackError);
+			}
+		}
+
+		// Show feedback to user
+		const original = els.copyBtn.textContent;
+		if (success) {
+			els.copyBtn.textContent = "Copied!";
+			setTimeout(() => {
+				els.copyBtn.textContent = original;
+			}, 1200);
+		} else {
+			els.copyBtn.textContent = "Copy failed";
+			alert("Couldn't copy to clipboard. Please select the JSON below and press Ctrl+C.");
+			setTimeout(() => {
+				els.copyBtn.textContent = original;
+			}, 2000);
 		}
 	});
 
@@ -426,6 +461,10 @@
 			state = {
 				title: typeof parsed.title === "string" ? parsed.title : "",
 				showLabels: parsed.showLabels !== false,
+				glassOpacity:
+					typeof parsed.glassOpacity === "number" && parsed.glassOpacity >= 0 && parsed.glassOpacity <= 1
+						? parsed.glassOpacity
+						: defaultState.glassOpacity,
 				background: typeof parsed.background === "string" ? parsed.background : "",
 				items: Array.isArray(parsed.items) ? parsed.items.map(normalizeItem) : []
 			};
