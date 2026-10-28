@@ -36,7 +36,8 @@
 		return {
 			alt: typeof item?.alt === "string" ? item.alt : "",
 			icon: typeof item?.icon === "string" ? item.icon : "",
-			link: typeof item?.link === "string" ? item.link : ""
+			link: typeof item?.link === "string" ? item.link : "",
+			target: ["_self", "_blank"].includes(item?.target) ? item.target : ""
 		};
 	}
 
@@ -140,7 +141,20 @@
 				saveDraft();
 			});
 
+			const targetSelect = document.createElement("select");
+			targetSelect.className = "f-target";
+			targetSelect.innerHTML = `<option value="_self"${item.target !== "_blank" ? " selected" : ""}>Same tab</option><option value="_blank"${item.target === "_blank" ? " selected" : ""}>New tab (_blank)</option>`;
+			targetSelect.addEventListener("change", () => {
+				state.items[index].target = targetSelect.value;
+				renderJSON();
+				saveDraft();
+			});
+
 			const iconField = document.createElement("div");
+			const targetLabel = document.createElement("label");
+			targetLabel.style.cssText = "font-size:.75rem;color:var(--ink-soft);margin-top:4px;display:block;";
+			targetLabel.textContent = "Opens in:";
+
 			iconField.className = "icon-field";
 
 			const iconPreview = document.createElement("i");
@@ -166,7 +180,7 @@
 			browseBtn.addEventListener("click", () => openIconPicker(index));
 
 			iconField.append(iconPreview, iconInput, browseBtn);
-			fields.append(altInput, iconField, linkInput);
+			fields.append(altInput, iconField, linkInput, targetLabel, targetSelect);
 
 			const controls = document.createElement("div");
 			controls.className = "item-controls";
@@ -203,6 +217,8 @@
 			const tile = document.createElement("a");
 			tile.className = "tile";
 			tile.href = item.link || "#";
+			tile.target = item.target === "_blank" ? "_blank" : "_self";
+			if (tile.target === "_blank") tile.rel = "noopener noreferrer";
 			tile.title = item.alt;
 			tile.style.setProperty("--i", index);
 			tile.addEventListener("click", (e) => e.preventDefault());
@@ -228,7 +244,7 @@
 			title: state.title,
 			showLabels: state.showLabels,
 			...(state.background ? { background: state.background } : {}),
-			items: state.items.map((item) => ({ alt: item.alt, icon: item.icon, link: item.link }))
+			items: state.items.map((item) => ({ alt: item.alt, icon: item.icon, link: item.link, ...(item.target === "_blank" ? { target: "_blank" } : {}) }))
 		};
 		els.jsonOutput.textContent = JSON.stringify(output, null, "\t");
 	}

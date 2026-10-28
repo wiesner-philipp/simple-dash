@@ -53,6 +53,8 @@
 						const tile = document.createElement("a");
 						tile.className = "tile";
 						tile.href = item.link;
+						tile.target = item.target === "_blank" ? "_blank" : "_self";
+						if (tile.target === "_blank") tile.rel = "noopener noreferrer";
 						tile.title = item.alt;
 						tile.style.setProperty("--i", index);
 

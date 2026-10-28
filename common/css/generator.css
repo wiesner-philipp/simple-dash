@@ -99,7 +99,7 @@ body#homepage {
 }
 .field input[type="text"],
 .field input[type="url"],
-input.f-alt, input.f-icon, input.f-link,
+input.f-alt, input.f-icon, input.f-link, select.f-target,
 #icon-search {
 	width: 100%;
 	padding: 10px 12px;
@@ -111,7 +111,7 @@ input.f-alt, input.f-icon, input.f-link,
 	font-family: inherit;
 }
 .field input:focus-visible,
-input.f-alt:focus-visible, input.f-icon:focus-visible, input.f-link:focus-visible,
+input.f-alt:focus-visible, input.f-icon:focus-visible, input.f-link:focus-visible, select.f-target:focus-visible,
 #icon-search:focus-visible {
 	outline: 2px solid var(--accent);
 	outline-offset: 1px;
