@@ -13,6 +13,14 @@ This project uses:
 - Font Awesome 7
 - Trianglify
 
+## Screenshots
+
+### Desktop View
+![Desktop Screenshot](screenshot-desktop.png)
+
+### Mobile View
+![Mobile Screenshot](screenshot-mobile.png)
+
 ## To Use
 Copy the config.sample.json file and rename to config.json. Be sure to update the fields as you see appropriate.
 
