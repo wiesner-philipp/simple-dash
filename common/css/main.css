@@ -76,7 +76,20 @@ body {
 	padding: 32px max(24px, env(safe-area-inset-right)) 32px max(24px, env(safe-area-inset-left));
 }
 
+/* Same frosted-glass backing as the tiles, so the title stays legible over
+   any background - inline-flex keeps the plate hugging the text instead of
+   stretching across the full column width. */
 #dash-header {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 12px 26px;
+	border-radius: var(--radius);
+	background: var(--glass);
+	border: 1px solid var(--glass-border);
+	backdrop-filter: blur(20px) saturate(140%) brightness(.74);
+	-webkit-backdrop-filter: blur(20px) saturate(140%) brightness(.74);
+	box-shadow: 0 6px 18px rgba(0, 0, 0, .18);
 	text-align: center;
 }
 #dash-header:empty {
