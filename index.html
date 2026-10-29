@@ -89,6 +89,7 @@
 					if (valid) {
 						sessionStorage.setItem("simple-dash-auth", "true");
 						hideAuthOverlay();
+						renderItems(config);
 					} else {
 						authError.textContent = "Incorrect password. Please try again.";
 						authError.classList.remove("hidden");
