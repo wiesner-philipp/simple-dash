@@ -54,16 +54,26 @@ def take_screenshots():
         
         time.sleep(2)  # Extra time for animations and rendering
         
-        # Desktop screenshot (landscape)
+        # Desktop screenshot (landscape) - use exact viewport via CDP
         print("Taking desktop screenshot...")
-        driver.set_window_size(1920, 1080)
+        driver.execute_cdp_cmd('Emulation.setDeviceMetricsOverride', {
+            'width': 1920,
+            'height': 1080,
+            'deviceScaleFactor': 1,
+            'mobile': False
+        })
         time.sleep(1)
         driver.save_screenshot('screenshot-desktop.png')
         print("Saved screenshot-desktop.png")
         
-        # Mobile screenshot (portrait)
+        # Mobile screenshot (portrait) - use exact viewport via CDP
         print("Taking mobile screenshot...")
-        driver.set_window_size(375, 667)  # iPhone SE size
+        driver.execute_cdp_cmd('Emulation.setDeviceMetricsOverride', {
+            'width': 375,
+            'height': 667,
+            'deviceScaleFactor': 1,
+            'mobile': True
+        })
         time.sleep(1)
         driver.save_screenshot('screenshot-mobile.png')
         print("Saved screenshot-mobile.png")
