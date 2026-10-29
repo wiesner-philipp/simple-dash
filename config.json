@@ -1,49 +1,11 @@
 {
-	"title": "Your Dashboard",
-	"showLabels": true,
-	"glassOpacity": 0.62,
-	"items": [
+	"title" : "Test Dashboard",
+	"password" : "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+	"items" : [
 		{
-			"title": "GitHub",
-			"subtitle": "Code & Repositories",
-			"icon": "fa-brands fa-github",
-			"link": "https://github.com"
-		},
-		{
-			"title": "Twitter / X",
-			"subtitle": "Social Media",
-			"icon": "fa-brands fa-x-twitter",
-			"link": "https://twitter.com"
-		},
-		{
-			"title": "YouTube",
-			"subtitle": "Video Streaming",
-			"icon": "fa-brands fa-youtube",
-			"link": "https://youtube.com"
-		},
-		{
-			"title": "Reddit",
-			"subtitle": "Community Forums",
-			"icon": "fa-brands fa-reddit-alien",
-			"link": "https://reddit.com"
-		},
-		{
-			"title": "Amazon",
-			"subtitle": "Online Shopping",
-			"icon": "fa-brands fa-amazon",
-			"link": "https://amazon.com"
-		},
-		{
-			"title": "Spotify",
-			"subtitle": "Music Streaming",
-			"icon": "fa-brands fa-spotify",
-			"link": "https://spotify.com"
-		},
-		{
-			"title": "Gmail",
-			"subtitle": "Email Service",
-			"icon": "fa-solid fa-envelope",
-			"link": "https://mail.google.com"
+			"alt" : "Test Item",
+			"icon" : "fa-solid fa-house",
+			"link" : "https://example.com"
 		}
 	]
 }

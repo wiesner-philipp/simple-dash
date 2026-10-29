@@ -29,3 +29,4 @@ Prefer a visual editor? Open `generator.html` (in your browser, or hosted alongs
 
 - 'items' => The menu will scale to the amount of items you want to display. Insert any link you'd like, or {{cur}} for the current URL of the page. Browse icons at [Font Awesome](https://fontawesome.com/search?ic=free) and use the class shown there, e.g. `fa-solid fa-house` or `fa-brands fa-github`.
 - 'showLabels' => Optional, defaults to `true`. Set to `false` to hide the text labels under each icon.
+- 'password' => Optional. A SHA-256 hash of your desired password (hex string). When set, visitors must enter the correct password before seeing the dashboard. The authenticated state is stored in sessionStorage and persists for the browser session. To generate a hash from a plain-text password, use any online SHA-256 tool or run `echo -n "yourpassword" | sha256sum` on Linux/macOS.

@@ -15,6 +15,20 @@
 	<body id="homepage">
 		<div id="bg" aria-hidden="true"></div>
 
+		<!-- Password overlay -->
+		<div id="auth-overlay" class="auth-overlay hidden">
+			<form id="auth-form" class="auth-card" autocomplete="off">
+				<i class="fa-solid fa-lock auth-icon" aria-hidden="true"></i>
+				<h2 class="auth-title">Enter Password</h2>
+				<p class="auth-subtitle">This dashboard is password protected.</p>
+				<div class="auth-field">
+					<input type="password" id="auth-password" name="password" placeholder="Password" required autofocus />
+				</div>
+				<button type="submit" class="auth-button">Unlock</button>
+				<p id="auth-error" class="auth-error hidden"></p>
+			</form>
+		</div>
+
 		<main id="wrapper">
 			<header id="dash-header">
 				<h1 id="dash-title"></h1>
@@ -30,6 +44,64 @@
 
 		<script src="common/js/trianglify.min.js"></script>
 		<script>
+			const bg = document.getElementById("bg");
+			const authOverlay = document.getElementById("auth-overlay");
+			const authForm = document.getElementById("auth-form");
+			const authPassword = document.getElementById("auth-password");
+			const authError = document.getElementById("auth-error");
+
+			let config = null;
+			let passwordHash = null;
+
+			// SHA-256 hash a string using Web Crypto API
+			async function sha256(text) {
+				const encoder = new TextEncoder();
+				const data = encoder.encode(text);
+				const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+				const hashArray = Array.from(new Uint8Array(hashBuffer));
+				return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+			}
+
+			function showAuthOverlay() {
+				authOverlay.classList.remove("hidden");
+				authPassword.focus();
+			}
+
+			function hideAuthOverlay() {
+				authOverlay.classList.add("hidden");
+			}
+
+			async function checkPassword(password) {
+				if (!passwordHash) return true;
+				const inputHash = await sha256(password);
+				return inputHash === passwordHash;
+			}
+
+			authForm.addEventListener("submit", async (e) => {
+				e.preventDefault();
+				authError.classList.add("hidden");
+
+				const password = authPassword.value;
+				if (!password) return;
+
+				try {
+					const valid = await checkPassword(password);
+					if (valid) {
+						sessionStorage.setItem("simple-dash-auth", "true");
+						hideAuthOverlay();
+					} else {
+						authError.textContent = "Incorrect password. Please try again.";
+						authError.classList.remove("hidden");
+						authPassword.value = "";
+						authPassword.focus();
+					}
+				} catch (err) {
+					console.error(err);
+					authError.textContent = "An error occurred while checking the password.";
+					authError.classList.remove("hidden");
+				}
+			});
+
 			async function loadConfig() {
 				const itemlist = document.getElementById("itemlist");
 				const heading = document.getElementById("dash-title");
@@ -41,7 +113,7 @@
 						throw new Error(`Error: ${response.status}`);
 					}
 
-					const config = await response.json();
+					config = await response.json();
 					document.title = config.title ?? "simple-dash";
 					heading.textContent = config.title ?? "";
 					itemlist.classList.toggle("no-labels", config.showLabels === false);
@@ -50,34 +122,17 @@
 					}
 					applyBackground(config.background);
 
-					const fragment = document.createDocumentFragment();
+					// Check for password protection
+					if (config.password) {
+						passwordHash = config.password;
+						const isAuthenticated = sessionStorage.getItem("simple-dash-auth") === "true";
+						if (!isAuthenticated) {
+							showAuthOverlay();
+							return; // Don't render items until authenticated
+						}
+					}
 
-					(config.items ?? []).forEach((item, index) => {
-						const tile = document.createElement("a");
-						tile.className = "tile";
-						tile.href = item.link;
-						tile.target = item.target === "_blank" ? "_blank" : "_self";
-						if (tile.target === "_blank") tile.rel = "noopener noreferrer";
-						tile.title = item.alt;
-						tile.style.setProperty("--i", index);
-
-						const iconWrap = document.createElement("span");
-						iconWrap.className = "tile-icon";
-						const icon = document.createElement("i");
-						icon.className = `${item.icon} fa-fw`;
-						icon.setAttribute("aria-hidden", "true");
-						iconWrap.appendChild(icon);
-
-						const label = document.createElement("span");
-						label.className = "tile-label";
-						label.textContent = item.alt ?? "";
-
-						tile.append(iconWrap, label);
-						fragment.appendChild(tile);
-					});
-
-					itemlist.classList.remove("is-message");
-					itemlist.replaceChildren(fragment);
+					renderItems(config);
 				} catch (error) {
 					console.error(error);
 					document.title = error.message;
@@ -92,6 +147,38 @@
 						'<span>Couldn\u2019t load config.json \u2014 check the console for details.</span>';
 					itemlist.appendChild(panel);
 				}
+			}
+
+			function renderItems(config) {
+				const itemlist = document.getElementById("itemlist");
+				const fragment = document.createDocumentFragment();
+
+				(config.items ?? []).forEach((item, index) => {
+					const tile = document.createElement("a");
+					tile.className = "tile";
+					tile.href = item.link;
+					tile.target = item.target === "_blank" ? "_blank" : "_self";
+					if (tile.target === "_blank") tile.rel = "noopener noreferrer";
+					tile.title = item.alt;
+					tile.style.setProperty("--i", index);
+
+					const iconWrap = document.createElement("span");
+					iconWrap.className = "tile-icon";
+					const icon = document.createElement("i");
+					icon.className = `${item.icon} fa-fw`;
+					icon.setAttribute("aria-hidden", "true");
+					iconWrap.appendChild(icon);
+
+					const label = document.createElement("span");
+					label.className = "tile-label";
+					label.textContent = item.alt ?? "";
+
+					tile.append(iconWrap, label);
+					fragment.appendChild(tile);
+				});
+
+				itemlist.classList.remove("is-message");
+				itemlist.replaceChildren(fragment);
 			}
 
 			// The background is a fixed, viewport-pinned layer (see #bg in the
